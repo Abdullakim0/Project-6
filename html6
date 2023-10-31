@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Stopwatch</title>
+    <style>
+        .container {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Stopwatch</h1>
+        <div id="stopwatch">00:00</div>
+        <button id="startButton">Start</button>
+        <button id="stopButton">Stop</button>
+        <button id="resetButton">Reset</button>
+    </div>
+    <script>
+        let startTime, intervalId;
+        let running = false;
+        const stopwatchDisplay = document.getElementById("stopwatch");
+
+        function formatTime(milliseconds) {
+            const totalSeconds = Math.floor(milliseconds / 1000);
+            const minutes = Math.floor(totalSeconds / 60);
+            const seconds = totalSeconds % 60;
+            return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function updateStopwatch() {
+            const currentTime = new Date().getTime();
+            const elapsedTime = currentTime - startTime;
+            stopwatchDisplay.innerHTML = formatTime(elapsedTime);
+        }
+
+        function startStopwatch() {
+            if (!running) {
+                startTime = new Date().getTime();
+                intervalId = setInterval(updateStopwatch, 500); // Refresh every 0.5 seconds
+                running = true;
+            }
+        }
+
+        function stopStopwatch() {
+            if (running) {
+                clearInterval(intervalId);
+                running = false;
+            }
+        }
+
+        function resetStopwatch() {
+            stopStopwatch();
+            startTime = 0;
+            stopwatchDisplay.innerHTML = "00:00";
+        }
+
+        document.getElementById("startButton").addEventListener("click", startStopwatch);
+        document.getElementById("stopButton").addEventListener("click", stopStopwatch);
+        document.getElementById("resetButton").addEventListener("click", resetStopwatch);
+    </script>
+</body>
+</html>
